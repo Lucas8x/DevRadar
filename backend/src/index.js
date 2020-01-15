@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const morgan = require('morgan')
 const routes = require('./routes')
 const app = express()
@@ -16,6 +17,7 @@ mongoose.connect(process.env.DB_URL, {
   console.log(`DB Connection Error: ${err}`)
 })
 
+app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(routes)
