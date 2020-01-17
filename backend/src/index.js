@@ -2,10 +2,16 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const morgan = require('morgan')
-const routes = require('./routes')
-const app = express()
-require('dotenv').config()
+const http = require('http')
 
+const routes = require('./routes')
+const {setupWebsocket} = require('./websocket')
+
+const app = express()
+const server = http.Server(app)
+setupWebsocket(server)
+
+require('dotenv').config()
 const port = process.env.PORT || 3001
 
 mongoose.connect(process.env.DB_URL, {
@@ -22,6 +28,6 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(routes)
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server listen port: ${port}`)
 })
